@@ -32,7 +32,7 @@ def parse_args():
     parser.add_argument("--seed", type=int, default=42, help="Random seed for initialization")
 
     # generation mode
-    parser.add_argument("--generation_mode", type=str, default="latentseek", choices=["latentseek", "steered", "greedy_cot", "self_consistency", "als_gated"], help="Generation mode to use")
+    parser.add_argument("--generation_mode", type=str, default="latentseek", choices=["latentseek", "als", "greedy_cot", "self_consistency", "als_gated"], help="Generation mode to use")
 
     # latentseek args
     parser.add_argument("--lr", type=float, default=0.03, help="Learning rate")
@@ -127,7 +127,7 @@ def main(args):
         data_name = args.dataset.replace("/", "-")
 
         # for steered modes, check for vector and skip prompt if not found
-        if args.generation_mode in ["steered", "als_gated"]:
+        if args.generation_mode in ["als", "als_gated"]:
             vector_path = args.vector_name_template.format(
                 model_name=model_name, 
                 dataset_name=data_name, 
@@ -216,7 +216,7 @@ def main(args):
                         k=args.k,
                         reward_threshold=args.reward_threshold,
                 )
-            elif args.generation_mode == "steered":
+            elif args.generation_mode == "als":
                 final_output = steered_generation(
                     model=model,
                     tokenizer=tokenizer,

@@ -69,13 +69,13 @@ python src/compute_steering_vector.py \
 
 Finally, use the pre-computed steering vector to guide the LLM's generation at test time.
 
-#### **ALS (steered)**
+#### **ALS**
 
 This is the main, efficient steering mode.
 
 ```bash
 python src/main.py \
-    --generation_mode steered \
+    --generation_mode als \
     --model_name_or_path /path/to/Llama-3.1-8B-Instruct \
     --dataset "openai/gsm8k" \
     --split "test" \
@@ -128,7 +128,7 @@ You can perform sweeps to analyze the effect of steering strength (`--alpha`).
 ```bash
 # Example: Alpha sweep on a 200-example subset of GSM8K
 python src/main.py \
-    --generation_mode steered \
+    --generation_mode als \
     --model_name_or_path /path/to/Qwen2.5-7B-Instruct \
     --dataset "openai/gsm8k" \
     --fixed_subset_path "./subsets/openai-gsm8k_test_200.txt" \
@@ -159,7 +159,7 @@ Generate plots to visualize rolling accuracy from a log file.
 
 ```bash
 python create_chart.py \
-    --log_file "./output/Meta-Llama-3.1-8B-Instruct-openai/gsm8k/steered_eval/prompt_0/logistics.pt" \
+    --log_file "./output/Meta-Llama-3.1-8B-Instruct-openai/gsm8k/als_eval/prompt_0/logistics.pt" \
     --output_dir "./charts"
 ```
 
