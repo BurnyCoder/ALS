@@ -180,4 +180,20 @@ python create_chart.py \
   * The `--prompts_to_run` argument can be used to select a specific prompt index.
   * Subsets and sweep commands are provided for full reproducibility.
 
+-----
+
+## Citation
+
+```bibtex
+@misc{egbuna2025amortizedlatentsteeringlowcost,
+      title={Amortized Latent Steering: Low-Cost Alternative to Test-Time Optimization}, 
+      author={Nathan Egbuna and Saatvik Gaur and Kevin Zhu and Sunishchal Dev and Ashwinee Panda and Maheep Chaudhary},
+      year={2025},
+      eprint={2509.18116},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2509.18116}, 
+}
+```
+
 For any questions, please email `egbunanathan@gmail.com`.
