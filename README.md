@@ -1,3 +1,5 @@
+[![arXiv](https://img.shields.io/badge/arXiv-2509.18116-blue.svg?style=flat)](https://arxiv.org/abs/2509.18116)
+
 # Amortized Latent Steering (ALS) for Efficient LLM Reasoning
 
 <p align="center">
