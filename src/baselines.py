@@ -11,32 +11,30 @@ def greedy_cot_generation(
     input_text: str,
     max_new_tokens: int = 1024,
     device: str = "cuda",
+    do_sample: bool = False,
+    temperature: float = 0.7,
 ) -> str:
     """
     Generates a single, greedy response from the model (standard Chain of Thought).
+    Can also be used for sampling if do_sample is True.
     """
-    eos_token = tokenizer.eos_token
-    if eos_token not in stop_words:
-        stop_words.append(eos_token)
-
     inputs = tokenizer([input_text], return_tensors="pt").to(device)
-    input_ids = inputs.input_ids
     
-    generated_ids = []
+    # ensure pad_token_id is set to avoid warnings
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token_id = tokenizer.eos_token_id
 
-    for _ in range(max_new_tokens):
-        with torch.no_grad():
-            outputs = model(input_ids)
-            next_token_logits = outputs.logits[:, -1, :]
-            next_token_id = torch.argmax(next_token_logits, dim=-1).unsqueeze(0)
+    with torch.no_grad():
+        outputs = model.generate(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            do_sample=do_sample,
+            temperature=temperature if do_sample else None,
+            pad_token_id=tokenizer.pad_token_id
+        )
 
-            new_token = tokenizer.decode(next_token_id.item())
-            if new_token in stop_words:
-                break
-            
-            generated_ids.append(next_token_id.item())
-            input_ids = torch.cat([input_ids, next_token_id], dim=-1)
-
+    # slice the output to get only the generated tokens (excluding prompt)
+    generated_ids = outputs[0][inputs.input_ids.shape[1]:]
     return tokenizer.decode(generated_ids, skip_special_tokens=True)
 
 def self_consistency_generation(
@@ -60,7 +58,9 @@ def self_consistency_generation(
             tokenizer=tokenizer,
             input_text=input_text,
             max_new_tokens=max_new_tokens,
-            device=device
+            device=device,
+            do_sample=True,
+            temperature=0.7
         )
         generations.append(gen)
 
